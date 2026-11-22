@@ -1,5 +1,5 @@
 """
-main.py - Main CLI entrypoint for YourFiendJob.
+main.py - Main CLI entrypoint for YourFindJob.
 Multi-tier storage integration: MongoDB (Primary) + JSON (Backup) + Excel (Report).
 
 Commands:
@@ -52,10 +52,10 @@ from tools.excel_manager import save_jobs_to_excel
 console = Console()
 
 
-def setup_logger(log_file: str = "logs/yourfiendjob.log") -> logging.Logger:
+def setup_logger(log_file: str = "logs/yourfindjob.log") -> logging.Logger:
     """Configures rotating file and console logging."""
     os.makedirs(os.path.dirname(log_file), exist_ok=True)
-    logger = logging.getLogger("YourFiendJob")
+    logger = logging.getLogger("YourFindJob")
     logger.setLevel(logging.INFO)
     
     if not logger.handlers:
@@ -97,7 +97,7 @@ class RichAgentLogger:
 def print_banner():
     """Renders the application banner."""
     banner = Text()
-    banner.append("YourFiendJob\n", style="bold cyan")
+    banner.append("YourFindJob\n", style="bold cyan")
     banner.append("Your Personal AI Job Hunting Assistant • MongoDB + JSON + Excel Multi-Tier Storage", style="dim white")
     console.print(Panel(banner, border_style="cyan", expand=False))
 
@@ -332,7 +332,7 @@ def run_sync_command():
 
 def run_general_test_suite():
     """Runs automated health checks on all project tools."""
-    console.print(Panel("[bold yellow]Running YourFiendJob System Health Checks...[/bold yellow]", border_style="yellow"))
+    console.print(Panel("[bold yellow]Running YourFindJob System Health Checks...[/bold yellow]", border_style="yellow"))
     from tools.bdjobs_search import search_bdjobs
     from tools.job_details import read_job_details
     from tools.duplicate_checker import filter_new_jobs
@@ -410,21 +410,21 @@ def run_general_test_suite():
     # Test 7: Email HTML Generator
     try:
         html = generate_email_html([mock_job], recipient_name="Tester")
-        assert len(html) > 500 and "YourFiendJob" in html
+        assert len(html) > 500 and "YourFindJob" in html
         console.print("[green]✔ [PASS][/green] Email HTML Generator (Generated responsive template)")
     except Exception as e:
         console.print(f"[red]✘ [FAIL][/red] Email HTML Generator: {e}")
         all_passed = False
 
     if all_passed:
-        console.print("\n[bold green]🎉 ALL SYSTEM HEALTH CHECKS PASSED! YourFiendJob is fully operational.[/bold green]\n")
+        console.print("\n[bold green]🎉 ALL SYSTEM HEALTH CHECKS PASSED! YourFindJob is fully operational.[/bold green]\n")
     else:
         console.print("\n[bold red]⚠ Some health checks failed. Review errors above.[/bold red]\n")
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="YourFiendJob - Your Personal AI Job Hunting Assistant",
+        description="YourFindJob - Your Personal AI Job Hunting Assistant",
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
     # Mode flags

@@ -1,5 +1,5 @@
 """
-Database package for YourFiendJob.
+Database package for YourFindJob.
 Exports MongoDB connection management and synchronization utilities.
 """
 

@@ -1,5 +1,5 @@
 """
-tools/mongodb_manager.py - MongoDB CRUD operations for YourFiendJob.
+tools/mongodb_manager.py - MongoDB CRUD operations for YourFindJob.
 Handles:
 - 'jobs' collection: primary job document storage with unique job_id / URL
 - 'processed_jobs' collection: tracking already processed jobs

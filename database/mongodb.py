@@ -14,7 +14,7 @@ from pymongo.database import Database
 load_dotenv()
 
 DEFAULT_URI = "mongodb://localhost:27017/"
-DEFAULT_DB_NAME = "yourfiendjob_db"
+DEFAULT_DB_NAME = "yourfindjob_db"
 DEFAULT_TIMEOUT_MS = 3000
 
 COLLECTION_JOBS = "jobs"

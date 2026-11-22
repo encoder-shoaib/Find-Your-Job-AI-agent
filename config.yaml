@@ -1,5 +1,5 @@
 agent:
-  name: "YourFiendJob"
+  name: "YourFindJob"
   tagline: "Your Personal AI Job Hunting Assistant"
   website: "https://www.bdjobs.com/"
   api_search_url: "https://api.bdjobs.com/jobs/api/v1/JobSearch/GetJobSearch"
@@ -22,11 +22,11 @@ agent:
   json_file: "data/jobs.json"
   excel_file: "data/jobs.xlsx"
   processed_cache: "data/processed_jobs.json"
-  log_file: "logs/yourfiendjob.log"
+  log_file: "logs/yourfindjob.log"
 
 database:
   mongodb_uri: "mongodb://localhost:27017/"
-  database_name: "yourfiendjob_db"
+  database_name: "yourfindjob_db"
   timeout_ms: 3000
   collections:
     jobs: "jobs"
@@ -113,9 +113,9 @@ tech_categories:
 
 email_notification:
   daily: true
-  subject_template: "YourFiendJob - Daily Tech Job Updates - {date}"
+  subject_template: "YourFindJob - Daily Tech Job Updates - {date}"
   send_empty_summary: true
-  sender_display_name: "YourFiendJob Assistant"
+  sender_display_name: "YourFindJob Assistant"
 
 scheduler:
   run_time: "08:00"

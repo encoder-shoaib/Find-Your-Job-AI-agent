@@ -1,5 +1,5 @@
 """
-Tools package for YourFiendJob.
+Tools package for YourFindJob.
 Exports the core tools and multi-tier storage managers:
 1. search_bdjobs
 2. read_job_details

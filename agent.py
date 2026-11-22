@@ -1,5 +1,5 @@
 """
-agent.py - OpenAI Agents SDK Implementation for YourFiendJob.
+agent.py - OpenAI Agents SDK Implementation for YourFindJob.
 Wires tools into an autonomous AI agent capable of multi-tier storage:
 1. MongoDB (Primary Database)
 2. JSON (data/jobs.json Local Backup)
@@ -328,7 +328,7 @@ def send_job_email_tool() -> str:
 # ---------------------------------------------------------------------------
 
 AGENT_INSTRUCTIONS = """
-You are YourFiendJob, an autonomous AI-powered job hunting assistant for Technology jobs in Bangladesh.
+You are YourFindJob, an autonomous AI-powered job hunting assistant for Technology jobs in Bangladesh.
 Your goal is to find fresh, relevant tech jobs on Bdjobs, analyze their compatibility, record them across MongoDB, JSON, and Excel, and deliver a daily digest email.
 
 Follow this standard procedure:
@@ -342,13 +342,13 @@ Follow this standard procedure:
 """
 
 
-def create_yourfiendjob_agent(model_name: Optional[str] = None) -> Agent:
+def create_yourfindjob_agent(model_name: Optional[str] = None) -> Agent:
     """Instantiates the OpenAI Agents SDK Agent with all tools."""
     if not model_name:
         model_name = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 
     agent = Agent(
-        name="YourFiendJob",
+        name="YourFindJob",
         instructions=AGENT_INSTRUCTIONS,
         tools=[
             search_bdjobs_tool,
@@ -389,11 +389,11 @@ def run_job_hunting_agent(
     if not keywords:
         keywords = ["Software Engineer", "Python Developer", "AI Engineer"]
 
-    ctx.log(f"Starting YourFiendJob run (OpenAI Agent Mode: {'Active' if use_openai_agent else 'Autonomous Deterministic'})...")
+    ctx.log(f"Starting YourFindJob run (OpenAI Agent Mode: {'Active' if use_openai_agent else 'Autonomous Deterministic'})...")
 
     if use_openai_agent:
         try:
-            agent = create_yourfiendjob_agent()
+            agent = create_yourfindjob_agent()
             prompt = f"Please hunt for tech jobs on Bdjobs using keywords: {keywords[:8]}. Filter duplicates, inspect details, analyze match with my profile, save to MongoDB/JSON/Excel, and prepare the daily email."
             ctx.log("Invoking OpenAI Agents SDK Runner...")
             result = Runner.run_sync(agent, input=prompt)

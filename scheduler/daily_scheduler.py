@@ -1,5 +1,5 @@
 """
-scheduler/daily_scheduler.py - Daily Automation Scheduler for YourFiendJob.
+scheduler/daily_scheduler.py - Daily Automation Scheduler for YourFindJob.
 Runs every morning at 8:00 AM Bangladesh Time (Asia/Dhaka) using APScheduler.
 """
 
@@ -17,9 +17,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from agent import run_job_hunting_agent
 
 
-def setup_logger(log_file: str = "logs/yourfiendjob.log"):
+def setup_logger(log_file: str = "logs/yourfindjob.log"):
     os.makedirs(os.path.dirname(log_file), exist_ok=True)
-    logger = logging.getLogger("YourFiendJob")
+    logger = logging.getLogger("YourFindJob")
     logger.setLevel(logging.INFO)
     
     # Avoid duplicate handlers if re-run
@@ -37,7 +37,7 @@ def setup_logger(log_file: str = "logs/yourfiendjob.log"):
 def scheduled_job():
     logger = setup_logger()
     logger.info("=" * 60)
-    logger.info("YourFiendJob Daily Scheduled Trigger Started.")
+    logger.info("YourFindJob Daily Scheduled Trigger Started.")
     try:
         summary = run_job_hunting_agent(config_path="config.yaml", dry_run=False, logger=logger)
         logger.info(f"Daily Run Completed: {summary.get('total_analyzed', 0)} jobs processed, "
@@ -61,10 +61,10 @@ def start_scheduler(config_path: str = "config.yaml"):
     scheduler = BlockingScheduler(timezone=tz)
 
     trigger = CronTrigger(hour=cron_hour, minute=cron_minute, timezone=tz)
-    scheduler.add_job(scheduled_job, trigger=trigger, id="yourfiendjob_daily_job", replace_existing=True)
+    scheduler.add_job(scheduled_job, trigger=trigger, id="yourfindjob_daily_job", replace_existing=True)
 
     print("\n" + "=" * 65)
-    print(f"  YourFiendJob Daily Scheduler Active")
+    print(f"  YourFindJob Daily Scheduler Active")
     print(f"  Scheduled Time: Every morning at {cron_hour:02d}:{cron_minute:02d} ({tz_str})")
     print(f"  Next Execution: Calculated according to {tz_str} wall clock")
     print(f"  Note: Keep this terminal / process running (or deploy as a background service)")

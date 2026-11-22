@@ -115,7 +115,7 @@ def generate_email_html(
         content_section = """
         <div style="background-color: #F8F9FA; border-radius: 8px; padding: 25px; text-align: center; color: #6C757D;">
             <h3>No New Tech Jobs Found Today</h3>
-            <p>YourFiendJob scanned all configured tech keywords on Bdjobs, but there are no new listings matching your profile today. We will run again tomorrow morning!</p>
+            <p>YourFindJob scanned all configured tech keywords on Bdjobs, but there are no new listings matching your profile today. We will run again tomorrow morning!</p>
         </div>
         """
 
@@ -124,14 +124,14 @@ def generate_email_html(
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YourFiendJob Daily Digest</title>
+    <title>YourFindJob Daily Digest</title>
 </head>
 <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #F4F6F9; margin: 0; padding: 20px;">
     <div style="max-width: 680px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
         
         <!-- Header Banner -->
         <div style="background: linear-gradient(135deg, #1F4E79 0%, #0D233A 100%); color: #ffffff; padding: 30px 25px; text-align: center;">
-            <h1 style="margin: 0; font-size: 26px; letter-spacing: 0.5px;">YourFiendJob</h1>
+            <h1 style="margin: 0; font-size: 26px; letter-spacing: 0.5px;">YourFindJob</h1>
             <p style="margin: 6px 0 0 0; font-size: 14px; opacity: 0.85;">Your Personal AI Job Hunting Assistant • Bangladesh Tech Digest</p>
             <div style="margin-top: 15px; font-size: 13px; background-color: rgba(255,255,255,0.15); display: inline-block; padding: 4px 14px; border-radius: 20px;">
                 📅 {date_str}
@@ -177,7 +177,7 @@ def generate_email_html(
 
         <!-- Footer -->
         <div style="background-color: #F8F9FA; padding: 20px; text-align: center; border-top: 1px solid #E9ECEF; font-size: 12px; color: #6C757D;">
-            <p style="margin: 0 0 5px 0;">This email was automatically generated and delivered by <strong>YourFiendJob</strong>.</p>
+            <p style="margin: 0 0 5px 0;">This email was automatically generated and delivered by <strong>YourFindJob</strong>.</p>
             <p style="margin: 0;">Only sent to your configured email. Never applies on your behalf.</p>
         </div>
 
@@ -198,7 +198,7 @@ def send_email_smtp(
 ) -> bool:
     """Sends email via standard Gmail TLS SMTP (Port 587)."""
     msg = MIMEMultipart("mixed")
-    msg["From"] = f"YourFiendJob Assistant <{sender_email}>"
+    msg["From"] = f"YourFindJob Assistant <{sender_email}>"
     msg["To"] = recipient_email
     msg["Subject"] = subject
 
@@ -246,7 +246,7 @@ def send_job_email(
                 print(msg)
 
     today_str = datetime.now().strftime("%Y-%m-%d")
-    subject = f"YourFiendJob - Daily Tech Job Updates - {today_str}"
+    subject = f"YourFindJob - Daily Tech Job Updates - {today_str}"
     html_content = generate_email_html(jobs, recipient_name=recipient_name)
 
     # Save HTML preview to data folder for easy local inspection
