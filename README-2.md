@@ -105,6 +105,9 @@
 
 ## ৫. সম্পূর্ণ সিস্টেম আর্কিটেকচার ডায়াগ্রাম
 
+![YourFindJob AI Agent - System Architecture & Workflow](architecture_diagram.png)
+
+### ইন্টারেক্টিভ আর্কিটেকচার ফ্লো (Mermaid Flowchart)
 ```mermaid
 flowchart TD
     subgraph TriggerLayer["১. ট্রিগার লেয়ার (Execution Triggers)"]
