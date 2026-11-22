@@ -1,0 +1,124 @@
+agent:
+  name: "YourFiendJob"
+  tagline: "Your Personal AI Job Hunting Assistant"
+  website: "https://www.bdjobs.com/"
+  api_search_url: "https://api.bdjobs.com/jobs/api/v1/JobSearch/GetJobSearch"
+  api_details_url: "https://api.bdjobs.com/jobs/api/v1/JobSubsystem/jobDetails"
+  country: "Bangladesh"
+  job_category: "Information Technology / IT / Software / Engineering"
+  category_ids:
+    - 8  # IT/Telecommunication
+    - 5  # Engineer/Architect
+  job_types:
+    - "Full-time"
+    - "Part-time"
+    - "Internship"
+    - "Remote"
+    - "Contract"
+  frequency: "Every morning"
+  max_jobs_per_run: 30
+  post_recency_days: 7
+  data_dir: "data"
+  json_file: "data/jobs.json"
+  excel_file: "data/jobs.xlsx"
+  processed_cache: "data/processed_jobs.json"
+  log_file: "logs/yourfiendjob.log"
+
+database:
+  mongodb_uri: "mongodb://localhost:27017/"
+  database_name: "yourfiendjob_db"
+  timeout_ms: 3000
+  collections:
+    jobs: "jobs"
+    processed_jobs: "processed_jobs"
+    search_history: "search_history"
+    agent_logs: "agent_logs"
+
+user_profile:
+  name: "YOUR_NAME"
+  email: "YOUR_EMAIL@gmail.com"
+  preferred_location: "Bangladesh"
+  preferred_job_locations:
+    - "Dhaka"
+    - "Remote"
+    - "Anywhere in Bangladesh"
+  preferred_job_types:
+    - "Full-time"
+    - "Internship"
+    - "Remote"
+    - "Contract"
+  experience_level:
+    - "Entry Level"
+    - "Fresher"
+    - "Junior"
+  max_experience_years: 2
+  preferred_salary: "Negotiable"
+  preferred_categories:
+    - "Software Development"
+    - "AI"
+    - "Data Science"
+    - "IT"
+  preferred_skills:
+    - "Python"
+    - "JavaScript"
+    - "React"
+    - "Django"
+    - "HTML"
+    - "CSS"
+    - "SQL"
+    - "AI"
+    - "Machine Learning"
+
+tech_categories:
+  software_development:
+    - "Junior Software Engineer"
+    - "Software Engineer"
+    - "Python Developer"
+    - "Django Developer"
+    - "Backend Developer"
+    - "Frontend Developer"
+    - "Full Stack Developer"
+    - "Java Developer"
+    - "PHP Developer"
+    - "Laravel Developer"
+    - "React Developer"
+    - "Node.js Developer"
+  ai_and_data:
+    - "AI Engineer"
+    - "Machine Learning Engineer"
+    - "AI Developer"
+    - "Data Analyst"
+    - "Data Scientist"
+    - "Data Engineer"
+    - "Generative AI Engineer"
+    - "Prompt Engineer"
+  it_and_networking:
+    - "IT Officer"
+    - "IT Executive"
+    - "System Administrator"
+    - "Network Engineer"
+    - "IT Support Engineer"
+    - "Cyber Security Analyst"
+    - "DevOps Engineer"
+    - "Cloud Engineer"
+  other_technology_jobs:
+    - "QA Engineer"
+    - "Software Tester"
+    - "Mobile App Developer"
+    - "Android Developer"
+    - "Flutter Developer"
+    - "UI/UX Designer"
+    - "Technical Support Engineer"
+    - "Database Administrator"
+
+email_notification:
+  daily: true
+  subject_template: "YourFiendJob - Daily Tech Job Updates - {date}"
+  send_empty_summary: true
+  sender_display_name: "YourFiendJob Assistant"
+
+scheduler:
+  run_time: "08:00"
+  cron_hour: 8
+  cron_minute: 0
+  timezone: "Asia/Dhaka"
