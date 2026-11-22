@@ -1,4 +1,4 @@
-# YourFindJob AI Agent 🤖💼
+# FindYourJob AI Agent 🤖💼
 
 > **Your Personal AI Job Hunting Assistant**  
 > *An autonomous AI agent that aggregates daily technology jobs from Bdjobs.com, evaluates profile match suitability with hybrid AI scoring, persists records across a 3-tier fault-tolerant storage pipeline (MongoDB + JSON + Excel), and delivers structured email digests.*
