@@ -1,329 +1,281 @@
-# YourFindJob-AI-agent
+# YourFindJob AI Agent 🤖💼
 
-# YourFindJob (ইউরফাইন্ডজব) 🤖💼
 > **Your Personal AI Job Hunting Assistant**  
-> *বিডিজবস (Bdjobs) থেকে প্রতিদিনের টেক জব খোঁজা, AI দিয়ে ম্যাচিং স্কোরিং, MongoDB + JSON + Excel মাল্টি-টায়ার স্টোরেজে সংরক্ষণ এবং Gmail-এ নোটিফিকেশন পাঠানোর সম্পূর্ণ অটোমেটেড AI এজেন্ট।*
+> *An autonomous AI agent that aggregates daily technology jobs from Bdjobs.com, evaluates profile match suitability with hybrid AI scoring, persists records across a 3-tier fault-tolerant storage pipeline (MongoDB + JSON + Excel), and delivers structured email digests.*
 
 ---
 
-## সূচিপত্র (Table of Contents)
-1. [প্রজেক্টের বিবরণ ও কাজ করার পদ্ধতি (How It Works)](#১-প্রজেক্টের-বিবরণ-ও-কাজ-করার-পদ্ধতি)
-2. [মাল্টি-টায়ার স্টোরেজ আর্কিটেকচার (Multi-Tier Storage Architecture)](#২-মাল্টি-টায়ার-স্টোরেজ-আর্কিটেকচার)
-3. [MongoDB ডাটাবেস ও কালেকশনসমূহ (MongoDB Collections)](#৩-mongodb-ডাটাবেস-ও-কালেকশনসমূহ)
-4. [প্রজেক্ট ফোল্ডার স্ট্রাকচার (Project Structure)](#৪-প্রজেক্ট-ফোল্ডার-স্ট্রাকচার)
-5. [ইনস্টলেশন ও এনভায়রনমেন্ট সেটআপ (Setup Guide)](#৫-ইনস্টলেশন-ও-এনভায়রনমেন্ট-সেটআপ)
-6. [MongoDB কনফিগারেশন (MongoDB Configuration)](#৬-mongodb-কনফিগারেশন)
-7. [টেস্টিং ও ভ্যালিডেশন কমান্ডসমূহ (Testing Commands)](#৭-টেস্টিং-ও-ভ্যালিডেশন-কমান্ডসমূহ)
-   - [MongoDB টেস্ট (`--test-db`)](#ক-mongodb-কানেকশন-ও-কালেকশন-টেস্ট---test-db)
-   - [JSON ব্যাকআপ টেস্ট (`--test-json`)](#খ-json-ব্যাকআপ-ও-ডুপ্লিকেট-টেস্ট---test-json)
-   - [মাল্টি-টায়ার স্টোরেজ টেস্ট (`--test-storage`)](#গ-সম্পূর্ণ-মাল্টি-টায়ার-স্টোরেজ-টেস্ট---test-storage)
-   - [ডাটাবেস সিঙ্ক (`--sync`)](#ঘ-অফলাইন-ডাটা-সিঙ্ক---sync)
-   - [ড্রাই রান মোড (`--dry-run --limit 5`)](#ঙ-ড্রাই-রান-ও-লিমিট-মোড---dry-run---limit-5)
-8. [OpenAI API ও Gmail সেটআপ](#৮-openai-api-ও-gmail-সেটআপ)
-9. [প্রতিদিনের অটোমেশন শিডিউলার (Daily Automation Scheduler)](#৯-প্রতিদিনের-অটোমেশন-শিডিউলার)
-10. [অফলাইন ফলব্যাক ও রিকভারি পদ্ধতি (Offline Fallback & Recovery)](#১০-অফলাইন-ফলব্যাক-ও-রিকভারি-পদ্ধতি)
-11. [MERN Stack ওয়েব ড্যাশবোর্ড (Web SaaS Dashboard)](#১১-mern-stack-ওয়েব-ড্যাশবোর্ড)
-12. [নিরাপত্তা ও নৈতিকতা বিধিমালা (Safety & Reliability)](#১২-নিরাপত্তা-ও-নৈতিকতা-বিধিমালা)
-13. [সমস্যা সমাধান ও ট্রাবলশুটিং (Troubleshooting Guide)](#১৩-সমস্যা-সমাধান-ও-ট্রাবলশুটিং)
+## 📌 Table of Contents
+1. [Project Overview & How It Works](#1-project-overview--how-it-works)
+2. [Multi-Tier Storage Architecture](#2-multi-tier-storage-architecture)
+3. [MongoDB Database & Collections](#3-mongodb-database--collections)
+4. [Project Directory Structure](#4-project-directory-structure)
+5. [Installation & Setup Guide](#5-installation--setup-guide)
+6. [Configuration & Environment Variables](#6-configuration--environment-variables)
+7. [Testing & CLI Command Reference](#7-testing--cli-command-reference)
+8. [OpenAI API & Gmail Notification Setup](#8-openai-api--gmail-notification-setup)
+9. [Daily Automation Scheduler](#9-daily-automation-scheduler)
+10. [Fault-Tolerant Offline Fallback & Recovery](#10-fault-tolerant-offline-fallback--recovery)
+11. [MERN Stack SaaS Web Integration](#11-mern-stack-saas-web-integration)
+12. [Safety, Reliability & Ethical Standards](#12-safety-reliability--ethical-standards)
+13. [Troubleshooting Guide](#13-troubleshooting-guide)
 
 ---
 
-## ১. প্রজেক্টের বিবরণ ও কাজ করার পদ্ধতি
+## 1. Project Overview & How It Works
 
-**YourFindJob** হলো একটি সম্পূর্ণ পাইথন-ভিত্তিক কৃত্রিম বুদ্ধিমত্তা সম্পন্ন জব হান্টিং সহকারী। এটি প্রতিদিন সকালে বাংলাদেশের শীর্ষস্থানীয় জব পোর্টাল **Bdjobs.com** থেকে নতুন টেকনোলজি ও সফটওয়্যার জব স্বয়ংক্রিয়ভাবে সংগ্রহ করে, AI দিয়ে আপনার পছন্দের সাথে সামঞ্জস্যতা বিশ্লেষণ করে এবং একাধারে **MongoDB**, **JSON** এবং **Excel**-এ সংরক্ষণ করে।
+**YourFindJob AI Agent** is a production-grade Python automation service engineered to crawl, analyze, rank, and report fresh tech job openings from Bangladesh's premier employment portal, **Bdjobs.com**.
 
-### কাজের ধাপসমূহ:
-1. **স্বয়ংক্রিয় সার্চ (`search_bdjobs`)**: বিডিজবসের অফিশিয়াল পাবলিক রেস্ট এপিআই (`api.bdjobs.com`) থেকে কনফিগারেশনের সব টেক কীওয়ার্ড ও ক্যাটাগরি অনুযায়ী নতুন চাকরি খোঁজে।
-2. **মাল্টি-টায়ার ডুপ্লিকেট ফিল্টারিং (`check_duplicate_jobs`)**: MongoDB, `data/jobs.json` এবং `data/jobs.xlsx` মিলিয়ে পূর্বে সংগৃহীত কোনো চাকরি যেন দ্বিতীয়বার প্রসেস না হয় তা নিশ্চিত করে।
-3. **ডিটেইলস বিশ্লেষণ (`read_job_details`)**: জবের পূর্ণাঙ্গ বর্ণনা, স্কিল রিকোয়ারমেন্ট, অভিজ্ঞতা, বেতন ও সরাসরি আবেদনের লিংক সংগ্রহ করে।
-4. **AI ম্যাচিং ও প্রায়োরিটি স্কোরিং (`analyze_job_match`)**: ১০-পয়েন্ট স্কেলে স্কোরিং করে High (৭+), Medium (৫-৬) বা Low (১-৪) প্রায়োরিটি নির্ধারণ করে।
-5. **মাল্টি-টায়ার সংরক্ষণ (`save_to_all_storages`)**:
-   - **Tier 1 (Primary)**: MongoDB ডাটাবেসে স্থায়ীভাবে সংরক্ষণ করে।
-   - **Tier 2 (Local Backup)**: `data/jobs.json` ফাইলে লোকাল ব্যাকআপ রাখে।
-   - **Tier 3 (Report)**: `data/jobs.xlsx` ফাইলে প্রফেশনাল স্প্রেডশিট রিপোর্ট আপডেট করে।
-6. **Gmail নোটিফিকেশন (`send_job_email`)**: প্রতিদিন সকালে হাই প্রায়োরিটি জবগুলোকে শীর্ষে রেখে Excel ফাইলটি এটাচমেন্টসহ আপনার জিমেইলে পাঠিয়ে দেয়।
+### Execution Pipeline:
+1. **Automated Search (`search_bdjobs`)**: Queries the official Bdjobs mobile REST API endpoints (`api.bdjobs.com`) across configured tech categories (Category 8: IT & Category 5: Engineering) and 18 technology keywords (*Python, React, Node, Full Stack, SQA, DevOps, AI, etc.*) with multi-page pagination.
+2. **Multi-Tier Deduplication (`check_duplicate_jobs`)**: Cross-checks candidates against MongoDB, `data/jobs.json`, `data/processed_jobs.json`, and `data/jobs.xlsx` to ensure no job is ever re-processed or reported twice.
+3. **Deep Details Extraction (`read_job_details`)**: Fetches full job specifications, extracts requirements, experience levels, education, compensation, deadlines, and direct apply links, sanitizing markup using BeautifulSoup4.
+4. **AI Matching & Priority Fit Scoring (`analyze_job_match`)**: Evaluates job descriptions against user-defined profile preferences using a 10-point scale:
+   - **High Priority (8–10)**: Strong alignment with primary technical skills and qualifications.
+   - **Medium Priority (5–7)**: Moderate overlap with transferable experience.
+   - **Low Priority (1–4)**: Peripheral relevance.
+5. **Multi-Tier Persistence (`save_to_all_storages`)**: Concurrently writes new records to:
+   - **Tier 1 (Primary Database)**: MongoDB (`yourfindjob_db`).
+   - **Tier 2 (Zero-Fail Local Backup)**: JSON store (`data/jobs.json`).
+   - **Tier 3 (Formatted Report)**: Excel workbook (`data/jobs.xlsx`).
+6. **Automated Email Notifications (`send_job_email`)**: Compiles high-priority discoveries into a responsive HTML email digest with the formatted Excel report attached and delivers it directly to your Gmail inbox.
 
 ---
 
-## ২. মাল্টি-টায়ার স্টোরেজ আর্কিটেকচার
+## 2. Multi-Tier Storage Architecture
 
 ![YourFindJob AI Agent - System Architecture & Workflow](architecture_diagram.png)
 
-YourFindJob ডাটার সর্বোচ্চ স্থায়িত্ব ও নির্ভরযোগ্যতা নিশ্চিত করতে ৩-স্তরের স্টোরেজ সিস্টেম ব্যবহার করে:
+To guarantee high availability and prevent data loss, YourFindJob employs a resilient 3-tier storage architecture:
 
-| স্টোরেজ স্তর | প্রযুক্তি | ভূমিকা | পাথ / কালেকশন |
+| Storage Tier | Technology | Purpose & Role | Destination Path / Collection |
 |---|---|---|---|
-| **Tier 1: Primary Database** | **MongoDB (PyMongo)** | দ্রুত কুয়েরি, স্থায়ী সেন্ট্রাল ডাটাবেস ও লগিং | `yourfindjob_db` |
-| **Tier 2: Local Backup** | **JSON Storage** | অফলাইন ব্যাকআপ ও তাৎক্ষণিক লোকাল এক্সেস | `data/jobs.json` |
-| **Tier 3: Executive Report** | **Excel (.xlsx)** | ক্লিকেবল লিংক ও কালার কোডিং সমৃদ্ধ স্প্রেডশিট | `data/jobs.xlsx` |
+| **Tier 1: Primary Database** | **MongoDB (PyMongo)** | Fast indexed querying, central persistence, and live API serving | `yourfindjob_db` |
+| **Tier 2: Local Backup** | **JSON Storage** | Offline-safe, atomic fallback preserving data during DB downtime | `data/jobs.json` |
+| **Tier 3: Executive Report** | **Excel (.xlsx)** | Formatted, color-coded spreadsheet with clickable apply hyperlinks | `data/jobs.xlsx` |
 
 ---
 
-## ৩. MongoDB ডাটাবেস ও কালেকশনসমূহ
+## 3. MongoDB Database & Collections
 
-MongoDB-তে `yourfindjob_db` ডাটাবেসের অধীনে ৪টি প্রধান কালেকশন রয়েছে:
+The primary database (`yourfindjob_db`) consists of 4 distinct collections:
 
-1. **`jobs`**: সংগৃহীত প্রতিটি টেক জবের সম্পূর্ণ তথ্য, AI ম্যাচ স্কোর, প্রায়োরিটি, রিকোয়ারমেন্ট ও আবেদনের লিংক। এতে `job_id` এবং `original_url`-এর ওপর **Unique Index** তৈরি করা থাকে যাতে কখনো ডুপ্লিকেট না ঢোকে।
-2. **`processed_jobs`**: পূর্বে প্রসেস হওয়া জব আইডি ও ট্র্যাকিং হিস্ট্রি।
-3. **`search_history`**: প্রতিদিন কোন কোন কীওয়ার্ড দিয়ে সার্চ করা হয়েছে, কতটি নতুন চাকরি পাওয়া গেছে তার অডিট হিস্ট্রি।
-4. **`agent_logs`**: এজেন্টের অভ্যন্তরীণ অ্যাকশন, ওয়ার্কফ্লো ইভেন্ট ও ত্রুটির বিস্তারিত লগ।
+1. **`jobs`**: Complete record of each discovered job listing, containing title, company, location, salary, experience, match score, priority rating, requirements, deadline, application URL, and timestamp. A unique index on `job_id` guarantees zero duplicates.
+2. **`processed_jobs`**: Historical ledger of processed job IDs to optimize subsequent crawling cycles.
+3. **`search_history`**: Audit trail of execution sessions, recording queries, timestamps, total discovered items, and newly persisted jobs.
+4. **`agent_logs`**: Internal diagnostic logs, execution events, and runtime trace information.
 
 ---
 
-## ৪. প্রজেক্ট ফোল্ডার স্ট্রাকচার
+## 4. Project Directory Structure
 
 ```text
-YourFindJob/
+YourFindJob-AI-agent/
 │
-├── main.py                    # প্রধান সিএলআই রানার (সকল টেস্ট ও এক্সিকিউশন ফ্ল্যাগ)
-├── agent.py                   # OpenAI Agents SDK কোর ও মাল্টি-টায়ার সেভিং
-├── config.yaml                # প্রোফাইল, টেক কীওয়ার্ড, ডাটাবেস সেটিংস
-├── requirements.txt           # PyMongo সহ প্রয়োজনীয় সকল প্যাকেজের তালিকা
-├── .env                       # API কি, জিমেইল ও MongoDB কানেকশন স্ট্রিং
-├── .env.example               # এনভায়রনমেন্ট ফাইলের নমুনা টেমপ্লেট
-├── .gitignore                 # গিট ট্র্যাকিং বহির্ভূত ফাইলের তালিকা
+├── main.py                    # Main CLI harness (execution flags & self-tests)
+├── agent.py                   # OpenAI Agents SDK implementation & multi-tier orchestration
+├── config.yaml                # Profile preferences, tech keywords, and schedule config
+├── requirements.txt           # Python dependencies (PyMongo, OpenAI, OpenPyXL, etc.)
+├── .env                       # Environment secrets (API keys, Gmail, MongoDB URI)
+├── .env.example               # Template environment configuration file
+├── .gitignore                 # Version control exclusion rules
+├── architecture_diagram.png   # 300 DPI high-resolution architecture diagram
+├── README.md                  # Comprehensive English documentation
+├── README-2.md                # In-depth technical architecture specification
 │
-├── database/                  # ডাটাবেস মডিউল
+├── database/                  # Database connectivity modules
 │   ├── __init__.py
-│   ├── mongodb.py             # MongoDB ক্লায়েন্ট, পিং চেক ও ইনডেক্স ম্যানেজার
-│   └── sync_manager.py        # অফলাইন JSON <--> MongoDB সিঙ্ক ইঞ্জিন
+│   ├── mongodb.py             # MongoDB client, ping checks, and index manager
+│   └── sync_manager.py        # Offline JSON <--> MongoDB synchronization engine
 │
-├── tools/                     # এজেন্টের কোর টুলস
+├── tools/                     # Modular agent capability tools
 │   ├── __init__.py
-│   ├── bdjobs_search.py       # Tool 1: Bdjobs টেক জব সার্চার
-│   ├── job_details.py         # Tool 2: জবের বিস্তারিত তথ্য সংগ্রহকারী
-│   ├── duplicate_checker.py   # Tool 3: মাল্টি-টায়ার ডুপ্লিকেট ফিল্টার
-│   ├── job_analyzer.py        # Tool 4: AI ম্যাচিং ও ১০-পয়েন্ট স্কোরিং রুব্রিক
-│   ├── excel_manager.py       # Tool 5: প্রফেশনাল Excel (.xlsx) জেনারেটর
-│   ├── email_sender.py        # Tool 6: রেসপনসিভ HTML ইমেইল ও এটাচমেন্ট প্রেরক
-│   ├── mongodb_manager.py     # MongoDB CRUD অপারেশন ও হিস্ট্রি ট্র্যাকিং
-│   └── json_manager.py        # লোকাল JSON ব্যাকআপ ও অ্যাটমিক সেভার
+│   ├── bdjobs_search.py       # Tool 1: Bdjobs REST API multi-query scraper
+│   ├── job_details.py         # Tool 2: Deep job description & requirement parser
+│   ├── duplicate_checker.py   # Tool 3: Cross-tier deduplication filter
+│   ├── job_analyzer.py        # Tool 4: Hybrid AI fit scoring & reasoning engine
+│   ├── excel_manager.py       # Tool 5: Styled Excel workbook generator (.xlsx)
+│   ├── email_sender.py        # Tool 6: Responsive HTML email & attachment dispatcher
+│   ├── mongodb_manager.py     # MongoDB CRUD operations & audit logger
+│   └── json_manager.py        # Atomic local JSON storage manager
 │
-├── data/                      # সংরক্ষিত ডাটাবেস ও রিপোর্ট
-│   ├── jobs.json              # সকল জবের লোকাল JSON ব্যাকআপ
-│   ├── processed_jobs.json    # প্রসেস হওয়া জব আইডি ট্র্যাকিং ক্যাশ
-│   ├── jobs.xlsx              # ১৮-কলামের মূল এক্সেল ডাটাবেস
-│   └── email_preview.html     # ড্রাই-রান মোডের ইমেইল প্রিভিউ ফাইল
+├── data/                      # Persistent storage & exported reports
+│   ├── jobs.json              # Local JSON backup of all collected jobs
+│   ├── processed_jobs.json    # Deduplication cache
+│   ├── jobs.xlsx              # Formatted Excel spreadsheet
+│   └── email_preview.html     # Dry-run email preview output
 │
 ├── logs/
-│   └── yourfindjob.log       # প্রতিদিনের বিস্তারিত টার্মিনাল লগ রেকর্ড
+│   └── yourfindjob.log        # Detailed terminal execution log
 │
-├── scheduler/
-│   ├── __init__.py
-│   └── daily_scheduler.py     # প্রতিদিন সকাল ৮:০০ টায় অটোমেশন শিডিউলার
-│
-└── README.md                  # সম্পূর্ণ বাংলা ডকুমেন্টেশন
+└── scheduler/
+    ├── __init__.py
+    └── daily_scheduler.py     # Background automation daemon (8:00 AM Asia/Dhaka)
 ```
 
 ---
 
-## ৫. ইনস্টলেশন ও এনভায়রনমেন্ট সেটআপ
+## 5. Installation & Setup Guide
 
-```powershell
-# ১. ডিপেনডেন্সি ইনস্টল করুন
+### 1. Clone & Set Up Virtual Environment
+```bash
+# Navigate to project directory
+cd YourFindJob-AI-agent
+
+# Create and activate a Python virtual environment (recommended)
+python -m venv venv
+# On Windows:
+.\venv\Scripts\activate
+# On Linux / macOS:
+source venv/bin/activate
+```
+
+### 2. Install Dependencies
+```bash
 pip install -r requirements.txt
+```
 
-# ২. .env ফাইল কনফিগার করুন
+### 3. Initialize Environment Variables
+```bash
 copy .env.example .env
+# On Linux / macOS:
+cp .env.example .env
 ```
 
 ---
 
-## ৬. MongoDB কনফিগারেশন
+## 6. Configuration & Environment Variables
 
-`.env` ফাইলে আপনার MongoDB কানেকশন স্ট্রিং যুক্ত করুন:
+Edit the `.env` file to supply your credentials:
 
 ```env
-# MongoDB Configuration (ডিফল্ট লোকাল ইনস্টলেশন)
+# MongoDB Configuration (Local or Cloud Atlas)
 MONGODB_URI=mongodb://localhost:27017/
 MONGODB_DB_NAME=yourfindjob_db
 MONGODB_TIMEOUT_MS=3000
+
+# OpenAI API Configuration
+OPENAI_API_KEY=sk-proj-your-openai-api-key-here
+OPENAI_MODEL=gpt-4o-mini
+
+# Gmail Notification Configuration (SMTP with App Password)
+GMAIL_SENDER_EMAIL=your_email@gmail.com
+GMAIL_APP_PASSWORD=your_16_character_app_password
+GMAIL_RECIPIENT_EMAIL=your_email@gmail.com
 ```
-*(আপনি চাইলে MongoDB Atlas ক্লাউড ইউআরআই-ও এখানে ব্যবহার করতে পারেন।)*
+
+> **Note on AI Resilience:** If `OPENAI_API_KEY` is not provided, the agent automatically activates its built-in **Deterministic Scoring Engine** to calculate accurate weighted fit scores without interrupting the workflow.
 
 ---
 
-## ৭. টেস্টিং ও ভ্যালিডেশন কমান্ডসমূহ
+## 7. Testing & CLI Command Reference
 
-YourFindJob-এ রয়েছে প্রতিটি কম্পোনেন্ট পুঙ্খানুপুঙ্খ পরীক্ষার জন্য আলাদা আলাদা কমান্ড:
+The agent includes dedicated CLI flags for granular component testing and validation:
 
-### ক. MongoDB কানেকশন ও কালেকশন টেস্ট (`--test-db`)
-সার্ভার পিং, ৪টি কালেকশন এবং ইনডেক্স ও CRUD অপারেশন যাচাই করতে:
-```powershell
+### 1. Test MongoDB Connectivity & Indexes (`--test-db`)
+Validates database connection, collection creation, and index initialization:
+```bash
 python main.py --test-db
 ```
 
-### খ. JSON ব্যাকআপ ও ডুপ্লিকেট টেস্ট (`--test-json`)
-`data/jobs.json`-এর রিড/রাইট, অ্যাটমিক রিপ্লেসমেন্ট ও ডুপ্লিকেট প্রতিরোধ পরীক্ষা করতে:
-```powershell
+### 2. Test Local JSON Backup Storage (`--test-json`)
+Verifies atomic writes, schema structure, and deduplication logic:
+```bash
 python main.py --test-json
 ```
 
-### গ. সম্পূর্ণ মাল্টি-টায়ার স্টোরেজ টেস্ট (`--test-storage`)
-MongoDB + JSON + Excel এবং MongoDB বিচ্ছিন্ন হলে স্বয়ংক্রিয় অফলাইন ফলব্যাক পরীক্ষা করতে:
-```powershell
+### 3. Run the Full Multi-Tier Storage Suite (`--test-storage`)
+Tests MongoDB, JSON, Excel generation, and simulates graceful offline fallback:
+```bash
 python main.py --test-storage
 ```
 
-### ঘ. অফলাইন ডাটা সিঙ্ক (`--sync`)
-MongoDB সাময়িকভাবে বন্ধ থাকার পর পুনরায় চালু হলে লোকাল JSON-এর ডাটাবেসে আপলোড করতে:
-```powershell
+### 4. Synchronize Offline Data (`--sync`)
+Uploads pending jobs saved in `data/jobs.json` to MongoDB after database reconnection:
+```bash
 python main.py --sync
 ```
 
-### ঙ. ড্রাই রান ও লিমিট মোড (`--dry-run --limit 5`)
-লাইভ বিডিজবস থেকে ৫টি টেক জব খুঁজে MongoDB, JSON ও Excel-এ সেভ করতে এবং ইমেইল প্রিভিউ দেখতে:
-```powershell
+### 5. Execute an On-Demand Dry Run (`--dry-run --limit 5`)
+Discovers up to 5 fresh technology jobs, performs match scoring, and saves to all storage tiers without dispatching live emails:
+```bash
 python main.py --dry-run --limit 5
 ```
 
 ---
 
-## ৮. OpenAI API ও Gmail সেটআপ
+## 8. OpenAI API & Gmail Notification Setup
 
-### OpenAI API Key:
-`.env` ফাইলে আপনার OpenAI কী যুক্ত করুন:
-```env
-OPENAI_API_KEY=sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-OPENAI_MODEL=gpt-4o-mini
-```
-*(OpenAI API Key না থাকলেও সিস্টেমের নিজস্ব হাই-অ্যাকিউরেসি ডিটারমিনিস্টিক স্কোরিং ইঞ্জিন কোনো বাধা ছাড়াই জব অ্যানালাইসিস সম্পন্ন করে।)*
+### OpenAI API Key
+1. Obtain an API key from the [OpenAI Platform](https://platform.openai.com/api-keys).
+2. Configure `OPENAI_API_KEY` and `OPENAI_MODEL=gpt-4o-mini` in `.env`.
 
-### Gmail App Password:
-1. [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)-এ যান।
-2. ১৬ অক্ষরের অ্যাপ পাসওয়ার্ড তৈরি করে `.env`-এ বসান:
-```env
-GMAIL_SENDER_EMAIL=your_email@gmail.com
-GMAIL_APP_PASSWORD=abcdefghijklmnop
-GMAIL_RECIPIENT_EMAIL=your_email@gmail.com
-```
+### Gmail App Password Setup
+To allow the agent to send automated email reports via your Gmail account:
+1. Navigate to your [Google Account Security Settings](https://myaccount.google.com/security).
+2. Ensure **2-Step Verification** is enabled.
+3. Search for **App Passwords** or visit [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords).
+4. Create an App Password with the name `YourFindJob`.
+5. Paste the generated 16-character password into `GMAIL_APP_PASSWORD` in `.env`.
 
 ---
 
-## ৯. প্রতিদিনের অটোমেশন শিডিউলার
+## 9. Daily Automation Scheduler
 
-প্রতিদিন সকাল ৮:০০ টায় স্বয়ংক্রিয়ভাবে জব হান্ট চালিয়ে নোটিফিকেশন পাঠাতে:
-```powershell
+To start the agent as a background daemon that automatically runs every morning at **8:00 AM (Asia/Dhaka time)**:
+
+```bash
 python main.py --scheduler
 ```
-*শিডিউলার ব্যাকগ্রাউন্ডে চলতে থাকবে এবং নির্ধারিত সময়ে পুরো প্রসেস সম্পন্ন করবে।*
+
+The scheduler uses **APScheduler** to execute recurring job discovery, update spreadsheets, write to MongoDB, and deliver morning email digests without requiring manual intervention.
 
 ---
 
-## ১০. অফলাইন ফলব্যাক ও রিকভারি পদ্ধতি
+## 10. Fault-Tolerant Offline Fallback & Recovery
 
-যদি কোনো কারণে MongoDB সার্ভার বন্ধ থাকে বা নেটওয়ার্ক সংযোগ বিচ্ছিন্ন হয়:
-1. YourFindJob ক্র্যাশ করবে না।
-2. এটি টার্মিনালে `[MongoDB Error]` প্রদর্শন করে স্বয়ংক্রিয়ভাবে **Local JSON Backup** সক্রিয় করবে।
-3. নতুন সকল জব `data/jobs.json`-এ `synced_to_db: false` ফ্ল্যাগ সহ নিরাপদে সেভ হবে।
-4. Excel রিপোর্ট যথারীতি তৈরি হবে।
-5. পরবর্তী সময়ে MongoDB চালু হলে শুধু একটি কমান্ড দিয়েই সব পেন্ডিং ডাটা সিঙ্ক করা যাবে:
-   ```powershell
+If MongoDB becomes unreachable due to a network disruption or server restart:
+1. **Zero-Crash Resilience**: The agent catches connection timeouts gracefully and continues execution.
+2. **Local Fallback Activation**: Unsynced records are tagged with `synced_to_db: false` and saved directly to `data/jobs.json`.
+3. **Report Continuity**: The Excel report (`data/jobs.xlsx`) and email digests continue to generate as scheduled.
+4. **One-Command Recovery**: When MongoDB is online again, execute:
+   ```bash
    python main.py --sync
    ```
+   This automatically pushes all offline records into MongoDB and updates their synchronization flags.
 
 ---
 
-## ১১. MERN Stack ওয়েব ড্যাশবোর্ড (Web SaaS Dashboard)
+## 11. MERN Stack SaaS Web Integration
 
-YourFindJob-এ যুক্ত করা হয়েছে একটি আধুনিক ও প্রফেশনাল **MERN Stack SaaS ড্যাশবোর্ড ওয়েবসাইট**। এটি কোনো ডামি ডাটা ব্যবহার করে না; সরাসরি বিদ্যমান MongoDB ডাটাবেস (`yourfindjob_db`) থেকে রিয়েল-টাইম ডাটা লোড ও আপডেট করে।
+The AI Agent integrates seamlessly with the **YourFindJob MERN Stack SaaS Web Application**, sharing a common MongoDB database:
 
-### প্রযুক্তি স্ট্যাক (Tech Stack):
-- **MongoDB**: প্রাইমারি ডাটাবেস (`yourfindjob_db`)
-- **Express.js (Node.js)**: হাই-পারফরম্যান্স REST API ব্যাকএন্ড (Port: `5000`)
-- **React.js 18 + Vite**: লাইটনিং ফাস্ট ফ্রন্টএন্ড সিঙ্গেল পেজ অ্যাপ্লিকেশান (Port: `3000`)
-- **Tailwind CSS**: Linear & Vercel স্টাইলের মিনিমাল ডার্ক থিম
-- **Aceternity UI**: `CardSpotlight`, `BentoGrid`, `MovingBorder` ডাইনামিক কম্পোনেন্টস
-- **Lucide React**: প্রফেশনাল আইকন সেট
-- **Motion / Framer Motion**: স্মুথ ট্রানজিশন ও ইন্টারেক্টিভ অ্যানিমেশন
+- **Real-Time Data Feeding**: Discovered jobs appear instantaneously on the React frontend.
+- **On-Demand Dashboard Triggers**: Administrators can trigger crawler hunts directly from the web browser via `POST /api/agent/run`.
+- **Bidirectional Settings Sync**: Changes made to skills or search preferences in the web settings panel synchronize directly with `config.yaml` and MongoDB.
 
 ---
 
-### ওয়েবসাইটের মূল ফিচার ও পেজসমূহ:
+## 12. Safety, Reliability & Ethical Standards
 
-1. **Dashboard (ইন্টেলিজেন্স ড্যাশবোর্ড)**:
-   - **৪টি স্পটলাইট মেট্রিক্স কার্ড**: Total Jobs Found, New Jobs Today, High Priority Jobs, Saved Jobs
-   - **Aceternity Bento Grid**: প্রায়োরিটি ডিস্ট্রিবিউশন বার, ৩-টায়ার স্টোরেজ সিস্টেমের লাইভ স্ট্যাটাস (MongoDB, JSON Backup, Excel Export), ক্যাটাগরি বিশ্লেষণ এবং সাম্প্রতিক চাকরির তালিকা।
-2. **All Jobs (চাকরি অনুসন্ধান ও ফিল্টার)**:
-   - **টেবিল ও কার্ড ভিউ টগল**: ফুল রেসপনসিভ সিম্যান্টিক টেবিল ও গ্রিড মোড।
-   - **মাল্টি-ক্রাইটেরিয়া সার্চ ও ফিল্টার**: টাইটেল, কোম্পানি, স্কিল দিয়ে লাইভ সার্চ, প্রায়োরিটি (High/Medium/Low), স্ট্যাটাস (New/Saved/Reviewed/Applied/Archived), মিনিমাম AI ম্যাচ স্কোর ও সর্টিং।
-   - **ইনস্ট্যান্ট বুকমার্ক ও স্ট্যাটাস চেঞ্জার**: এক ক্লিকে চাকরি সেভ করা বা অ্যাপ্লিকেশন স্ট্যাটাস পরিবর্তন করা।
-3. **Job Details Modal (বিস্তারিত ও AI অ্যানালাইসিস)**:
-   - জবের পূর্ণাঙ্গ বিবরণ, প্রয়োজনীয় স্কিল ব্যাজসমূহ, বেতন, অভিজ্ঞতা, ডেডলাইন ও সরাসরি Bdjobs-এ আবেদনের বোতাম।
-   - **AI Match Evaluation & Strategic Insights**: OpenAI Agent-এর স্কোরিংয়ের সুনির্দিষ্ট কারণ ও সুপারিশ।
-4. **AI Agent Activity (রানটাইম ও স্টোরেজ হেলথ মনিটরিং)**:
-   - **৩-টায়ার স্টোরেজ মনিটর**: MongoDB, JSON Backup (`data/jobs.json`) এবং Excel (`data/jobs.xlsx`)-এর ফাইল সাইজ, রো সংখ্যা ও হেলথ।
-   - **অন-ডিমান্ড এজেন্ট হান্ট ট্রিগার**: ব্রাউজার থেকেই 'Run Agent Now' বোতাম টিপে পাইথন এজেন্ট চালানো এবং টার্মিনাল আউটপুট দেখা।
-   - **সার্চ হিস্ট্রি ও অ্যাক্টিভিটি লগ টেবিল**: MongoDB থেকে সংগৃহীত লাইভ হিস্ট্রি ও অডিট লগ।
-5. **Settings (এজেন্ট প্রিফারেন্স ও কনফিগারেশন)**:
-   - **ইন্টারেক্টিভ স্কিল ট্যাগ এডিটর**: নিজের পছন্দের টেকনোলজি ও স্কিল যুক্ত বা রিমুভ করা।
-   - টেক ক্যাটাগরি, লোকেশন, এক্সপেরিয়েন্স লেভেল এবং দৈনিক জিমেইল নোটিফিকেশন প্রিফারেন্স সরাসরি আপডেট করা। সেভ বাটনে ক্লিক করলে তা সরাসরি `config.yaml` এবং MongoDB কালেকশনে সিঙ্ক হয়।
+1. **Non-Invasive API Access**: Queries official public REST API endpoints without triggering rate limits or bypassing access controls.
+2. **Bandwidth Efficiency**: Light JSON payloads eliminate the overhead and resource waste associated with heavy headless browser rendering.
+3. **No Automated Submissions**: The agent only discovers, scores, and notifies—it never submits applications autonomously on your behalf.
+4. **Atomic File Operations**: Prevents data corruption during simultaneous read/write cycles.
 
 ---
 
-### REST API এন্ডপয়েন্টস:
+## 13. Troubleshooting Guide
 
-| মেথড | এন্ডপয়েন্ট | বিবরণ |
+| Issue Encountered | Likely Cause | Resolution Steps |
 |---|---|---|
-| `GET` | `/api/dashboard/stats` | মোট চাকরি, নতুন চাকরি, প্রায়োরিটি ডিস্ট্রিবিউশন ও সাম্প্রতিক তালিকা |
-| `GET` | `/api/jobs` | সার্চ, ফিল্টার, সর্টিং এবং পেজিনেশন সহ চাকরির তালিকা |
-| `GET` | `/api/jobs/:id` | নির্দিষ্ট একটি চাকরির পূর্ণ বিবরণ ও AI রিকমেন্ডেশন |
-| `PATCH`| `/api/jobs/:id/status` | চাকরির স্ট্যাটাস (Saved, Reviewed, Applied ইত্যাদি) আপডেট |
-| `GET` | `/api/agent/status` | ৩-টায়ার স্টোরেজ হেলথ ও এজেন্টের রিয়েল-টাইম অবস্থা |
-| `GET` | `/api/agent/logs` | এজেন্টের সাম্প্রতিক এক্সিকিউশন ও অ্যাক্টিভিটি লগ |
-| `POST`| `/api/agent/run` | ব্রাউজার থেকে পাইথন এজেন্ট হান্ট স্ক্রিপ্ট শুরু করা |
-| `GET` | `/api/search/history` | অতীতের সার্চ কুয়েরি, প্রাপ্ত চাকরির সংখ্যা ও অডিট হিস্ট্রি |
-| `GET` | `/api/settings` | `config.yaml` এবং MongoDB থেকে বর্তমান প্রিফারেন্স সংগ্রহ |
-| `PUT` | `/api/settings` | নতুন স্কিল, ক্যাটাগরি ও ইমেইল সেটিংস আপডেট ও সিঙ্ক |
-
----
-
-### ওয়েবসাইট চালু করার নির্দেশিকা (How to Run Website):
-
-#### ১. ব্যাকএন্ড সার্ভার চালু করা (Express.js):
-```powershell
-cd backend
-npm start
-```
-*ব্যাকএন্ড সার্ভার `http://localhost:5000`-এ চালু হবে এবং MongoDB ডাটাবেসের সাথে কানেক্ট করবে।*
-
-#### ২. ফ্রন্টএন্ড ডেভেলপমেন্ট সার্ভার চালু করা (React.js + Vite):
-একটি নতুন টার্মিনাল উইন্ডো খুলে রান করুন:
-```powershell
-cd frontend
-npm run dev
-```
-*ফ্রন্টএন্ড সার্ভার `http://localhost:3000`-এ চালু হবে। ব্রাউজারে `http://localhost:3000` খুললে আপনার SaaS ড্যাশবোর্ড দেখতে পাবেন।*
-
-#### ৩. প্রোডাকশন মোডে একসাথে চালানো (Single Port):
-```powershell
-npm run build --prefix frontend
-cd backend
-npm start
-```
-*এরপর ব্রাউজারে সরাসরি `http://localhost:5000` ভিজিট করুন।*
-
----
-
-## ১২. নিরাপত্তা ও নৈতিকতা বিধিমালা
-
-1. **শুধুমাত্র পাবলিক তথ্য**: সাইটের উন্মুক্ত তথ্য সংগ্রহ করা হয়।
-2. **ডুপ্লিকেট সুরক্ষা**: Unique Job ID ও URL ব্যবহার করে ৩ স্তরেই ডুপ্লিকেট প্রতিরোধ করা হয়।
-3. **ক্যাপচা বা বাইপাস মুক্ত**: অফিশিয়াল পাবলিক রেস্ট এপিআই ব্যবহার করায় কোনো ব্লকিং বা ক্যাপচার ঝামেলা নেই।
-4. **স্বয়ংক্রিয় আবেদন নয়**: এজেন্ট নিজে কোনো চাকরিতে স্বয়ংক্রিয়ভাবে আবেদন করে না।
-
----
-
-## ১২. সমস্যা সমাধান ও ট্রাবলশুটিং
-
-| সমস্যা | সম্ভাব্য কারণ | সমাধান |
-|---|---|---|
-| `MongoDB Server Ping FAILED` | MongoDB সার্ভিস বন্ধ আছে | সার্ভিস প্যানেল থেকে MongoDB চালু করুন অথবা `net start MongoDB` কমান্ড দিন। |
-| `Excel Permission Denied` | এক্সেল ফাইলটি আগে থেকেই কোনো প্রোগ্রামে খোলা আছে | ফাইলটি এক্সেল প্রোগ্রামে খোলা থাকলে বন্ধ করে পুনরায় রান করুন। (সিস্টেম স্বয়ংক্রিয়ভাবে `jobs_latest.xlsx` ব্যাকআপে ডাটা সুরক্ষিত রাখবে)। |
-| `Gmail Authentication Error` | সাধারণ জিমেইল পাসওয়ার্ড দেওয়া হয়েছে | Google Security থেকে ১৬ অক্ষরের App Password তৈরি করে `.env`-এ দিন। |
+| `MongoDB Server Ping FAILED` | MongoDB service is not running | Start the service using `net start MongoDB` (Windows) or `sudo systemctl start mongod` (Linux), or check your `MONGODB_URI`. |
+| `Excel Permission Denied` | `data/jobs.xlsx` is currently open in Microsoft Excel | Close Excel and re-run. (The agent automatically saves a safety backup at `jobs_latest.xlsx`). |
+| `Gmail Authentication Error` | Standard password used instead of an App Password | Generate a 16-character Google App Password from your Google Account Security dashboard. |
+| `OpenAI RateLimit / Quota Exceeded` | OpenAI API account quota depleted | The agent automatically falls back to its built-in deterministic scoring algorithm with zero downtime. |
 
 ---
 
 <p align="center">
-  <b>YourFindJob</b> — Multi-Tier AI Job Hunting Assistant.
+  <b>YourFindJob</b> — Autonomous Multi-Tier AI Job Hunting Assistant.
 </p>
